@@ -16,7 +16,7 @@ $translator = new Translator($key);
 
 //import from a .po file:
 $loader = new PoLoader();
-$file = __DIR__ . '/' . $argv[1];
+$file = ($argv[1] ?? null);
 if (!is_file($file)) {
     echo "Invalid file path.\n";
     exit(2);
