@@ -1,0 +1,6 @@
+{
+    "require": {
+        "gettext/gettext": "^5.4",
+        "yandex/translate-api": "^1.5"
+    }
+}
