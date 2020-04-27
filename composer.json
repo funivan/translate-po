@@ -1,6 +1,6 @@
 {
     "require": {
         "gettext/gettext": "^5.4",
-        "yandex/translate-api": "^1.5"
+        "aws/aws-sdk-php": "^3.135"
     }
 }

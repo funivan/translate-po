@@ -2,17 +2,19 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Aws\Credentials\CredentialProvider;
+use Aws\Translate\TranslateClient;
 use Gettext\Generator\PoGenerator;
 use Gettext\Loader\PoLoader;
 use Gettext\Translation;
-use Yandex\Translate\Translator;
 
-$key = (string)getenv('YANDEX_TRANSLATE_API_KEY');
-if ($key === '') {
-    echo "Invalid environment variable: YANDEX_TRANSLATE_API_KEY \n";
-    exit(1);
-}
-$translator = new Translator($key);
+
+$client = new TranslateClient([
+//    'profile' => 'TranslateUser',
+    'region' => 'us-west-2',
+    'version' => 'latest',
+    'credentials' => CredentialProvider::ini('default', __DIR__ . '/credentials.ini')
+]);
 
 //import from a .po file:
 $loader = new PoLoader();
@@ -45,9 +47,14 @@ foreach ($translations as $translation) {
         $toTranslate = replace('!<[^>]+>!', $toTranslate, $replacers);
         $toTranslate = replace('!\%\{[^\}]+\}!', $toTranslate, $replacers);
         echo 'EN: ' . $original . "\n";
-        $result = $translator->translate($toTranslate, 'en-uk')->__toString();
+        $result = $client->translateText([
+            'SourceLanguageCode' => 'en',
+            'TargetLanguageCode' => 'uk',
+            'Text' => $toTranslate,
+        ]);
+        $result = $result['TranslatedText'];
         $uk = strtr($result, $replacers);
-        echo 'UA: ' . $uk . "\n";
+        echo 'UK: ' . $uk . "\n";
         if ($verbose && $uk !== $result) {
             echo '<<<>>>' . "\n";
             echo '>>> ->: ' . $toTranslate . "\n";
