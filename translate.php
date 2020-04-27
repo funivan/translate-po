@@ -10,7 +10,6 @@ use Gettext\Translation;
 
 
 $client = new TranslateClient([
-//    'profile' => 'TranslateUser',
     'region' => 'us-west-2',
     'version' => 'latest',
     'credentials' => CredentialProvider::ini('default', __DIR__ . '/credentials.ini')
